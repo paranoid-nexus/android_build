@@ -531,6 +531,15 @@ function _lunch_meat()
         then
             echo "Did you mean -${product/*_/}? (dash instead of underscore)"
         fi
+        echo
+        echo "** Don't have a product spec for: '$product'"
+        echo "** Do you have the right repo manifest?"
+        product=
+    fi
+
+    if [ -z "$product" -o -z "$variant" ]
+    then
+        echo
         return 1
     fi
     export TARGET_PRODUCT=$(_get_build_var_cached TARGET_PRODUCT)
@@ -648,6 +657,8 @@ function lunch2()
             variant=eng
         fi
     fi
+
+    check_product $product $release
 
     # Validate the selection and set all the environment stuff
     _lunch_meat $product $release $variant
