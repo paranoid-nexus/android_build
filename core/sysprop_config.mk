@@ -136,6 +136,25 @@ endif
 
 user_variant := $(filter user userdebug,$(TARGET_BUILD_VARIANT))
 
+# QCV: initialize property - used to detect framework type
+ifeq ($(TARGET_FWK_SUPPORTS_FULL_VALUEADDS), true)
+  ADDITIONAL_SYSTEM_PROPERTIES += \
+        ro.vendor.qti.va_aosp.support=1
+
+  ADDITIONAL_ODM_PROPERTIES += \
+        ro.vendor.qti.va_odm.support=1
+
+  $(warning "Compile using modified AOSP tree supporting full vendor value-adds")
+else
+  ADDITIONAL_SYSTEM_PROPERTIES += \
+        ro.vendor.qti.va_aosp.support=0
+
+  ADDITIONAL_ODM_PROPERTIES += \
+        ro.vendor.qti.va_odm.support=0
+
+  $(warning "Compile using pure AOSP tree")
+endif
+
 config_enable_uffd_gc := \
   $(firstword $(OVERRIDE_ENABLE_UFFD_GC) $(PRODUCT_ENABLE_UFFD_GC) default)
 
